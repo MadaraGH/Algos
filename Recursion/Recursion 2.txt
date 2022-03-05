@@ -1,0 +1,17 @@
+
+Divide and conquer
+
+A divide-and-conquer algorithm works by recursively breaking the problem down into two or more subproblems of the same or related type, 
+until these subproblems become simple enough to be solved directly [1]. Then one combines the results of subproblems to form the final solution.
+
+
+
+Steps in D&C
+
+1. Divide. 
+Divide the problem S{S}S into a set of subproblems: {S1,S2,...Sn}\{S_1, S_2, ... S_n\} {S1​,S2​,...Sn​} 
+where n≥2{n \geq 2}n≥2, i.e. there are usually more than one subproblem.
+
+2. Conquer. Solve each subproblem recursively. 
+
+3. Combine. Combine the results of each subproblem.

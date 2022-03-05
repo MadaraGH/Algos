@@ -1,0 +1,81 @@
+Heap Sort
+
+1. If an element has an index i, it's left child nofr is 2i+1 and right child node is 2i + 2 and parent is (i-1)/2
+2. In the case of a complete tree, the first index of a non leaf node is n/2-1
+3. Heap sort is done by 1st creating a heap data structure
+   then swapping the 1st (max) element with the last (n) one
+   Then we 'heapify' (Get the remaining max element to the top) then swap the 1st again with the new last (n-1)
+   We do this untill there's no more elements left in the heap
+
+
+Time Complexity - Best, worst, average    	O(nlog n)			
+Space Complexity				O(1)
+
+
+
+//========================================== Heap Sort ======================================
+
+class HeapSort {
+
+private:
+	vector<int> heap;
+
+public:
+	HeapSort(vector<int> h)
+		:heap(h)
+	{
+		CreateTree();
+	}
+
+	vector<int> GetSorted()
+	{
+		SortTree();
+		return heap;
+	}
+
+private:
+	void CreateTree()
+	{
+		int size = heap.size() - 1;
+		int n = heap.size() / 2 - 1;
+
+		for (int i = n; i >= 0; i--)
+		{
+			Heapify(i, size);
+		}
+	}
+
+	void Heapify(int i, int n)
+	{
+		int iLeft = 2*i + 1;
+		int iRight = 2*i + 2;
+		int iLargest = i;
+
+		if (iLeft < n && heap[iLargest] < heap[iLeft])
+			iLargest = iLeft;
+
+		if (iRight < n && heap[iLargest] < heap[iRight])
+			iLargest = iRight;
+
+		if (i != iLargest)
+		{
+			swap(heap[i], heap[iLargest]);
+			Heapify(iLargest, n);
+		}
+	}
+
+	void SortTree()
+	{
+		for (int i = heap.size() - 1; i >= 0; i--)
+		{
+			swap(heap[0], heap[i]);
+			Heapify(0, i);
+		}
+	}
+};
+
+int main()
+{
+	HeapSort hs({ 4, 17, 3, 12, 9, 6 });
+	vector<int> v_sorted = hs.GetSorted();
+}

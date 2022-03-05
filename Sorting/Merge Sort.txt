@@ -1,0 +1,100 @@
+Merge Sort
+
+1. Uses devide and conquer algorithm
+2. Merge sort recursively divides the array into halves until the a base case array of 1 element is reached
+   Then the merge function steps in - and merges the sorted sub array untill the entire array is sorted
+
+Merge function 
+
+consider sub arrays 1, 5, 10, 12 and 6, 9. The pointer to array location is with *
+
+			Sorted array
+1 5 10 12	6 9			Both pointers start with 0 indices
+*   		*			
+
+1 5 10 12       6 9	1	        1 < 6 so 1 is added to the sorted array and 1st array's inex moves up one  
+  *		*
+
+1 5 10 12       6 9	1 5		5 < 6 so 5 is added and so on
+    *		*
+
+1 5 10 12       6 9	1 5 6
+    *		  *
+
+1 5 10 12       6 9	1 5 6 9 	here we know the 2nd array has reached it's limit, 
+    *		  *			that means everything in 1st array can be added to the sorted array 
+
+
+Time complexity - O (n logn)
+space  - O(n)
+//========================================== Heap Sort ======================================
+
+
+void Merge(vector<int>& vec, int beg, int end)
+{
+	//get distance from start to middle and add start to get correct index
+	int mid		= (end - beg) / 2 + beg;
+	int k		= beg;
+
+	//need to copy vectors otherwise comparison will fail
+	vector<int> fVec(vec.begin() + beg, vec.begin() + mid + 1);
+	vector<int> sVec(vec.begin() + mid + 1, vec.begin() + end + 1);
+
+	int iFirst = 0; //pointer to the starting index of 1st vec
+	int iSecond = 0;//pointer to the starting index of 2nd vec
+
+	while (iFirst < fVec.size() && iSecond < sVec.size())
+	{
+		if (fVec[iFirst] < sVec[iSecond])
+		{
+			vec[k] = fVec[iFirst];
+			iFirst++;
+		}
+		else if (sVec[iSecond] < fVec[iFirst])
+		{
+			vec[k] = sVec[iSecond];
+			iSecond++;
+		}
+		k++;
+	}
+
+	//copy remaining array parts if they exist
+	while (iFirst < fVec.size())
+	{
+		vec[k] = fVec[iFirst];
+		iFirst++;
+		k++;
+	}
+
+	while (iSecond < sVec.size())
+	{
+		vec[k] = sVec[iSecond];
+		iSecond++;
+		k++;
+	}
+}
+
+void MergeSort(vector<int>& vec, int beg, int end)
+{
+	if (beg < end)
+	{
+		//get distance from start to middle and add start to get correct index
+		int mid = (end - beg) / 2 + beg;
+
+		MergeSort(vec, beg, mid);
+		MergeSort(vec, mid + 1, end);
+		Merge(vec, beg, end); 
+	}
+}
+
+int main()
+{
+	vector<int> vec1 = { 6, 5, 12, 10, 9, 1 };
+	MergeSort(vec1, 0, vec1.size() - 1);
+
+	vector<int> vec2 = { 101, 10, 2, 43, 12, 54, 34, 64, 89, 76 };
+	MergeSort(vec2, 0, vec2.size() - 1);
+}
+
+
+ 

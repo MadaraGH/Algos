@@ -1,0 +1,112 @@
+Breadth First Search
+
+1. traversing the tree row by row -  a level order traversal
+2. Uses queue data structure
+3. Get the root node - enqueu it, mark as visited
+4. Vist all adjacent nodes - mark them visited
+5. Used for garbage collection, GPS navigation, social networking sites, 
+   peer to peer network, shortest path and minimum spanning trees in unweighted graphs
+
+complexity - time : O(Vertices + Edges),   space: O(Vertices)
+
+
+0 ----3
+| \
+|  2
+| /  \
+1     4
+
+
+start from 0
+
+visited list- 0
+queue       - 1, 2, 3
+
+visited list- 0, 1
+queue       - 2, 3
+
+visited list- 0, 1, 2
+queue       - 3, 4
+
+visited list- 0, 1, 2, 3
+queue       - 4
+
+visited list- 0, 1, 2, 3, 4
+queue       - 
+
+
+#include <queue>
+
+struct Node
+{
+	Node* left;
+	Node* right;
+	int data;
+
+	Node(int d)
+		:left(nullptr), right(nullptr), data(d)
+	{
+	}
+};
+
+/*
+			    20
+			   /  \
+			  15  30
+			 /  \   \
+           		10   18  35
+				/  \
+			       34  38
+*/
+
+void Insertion(Node*& head, int value)
+{
+	if (!head)
+	{
+		head = new Node(value);
+		return;
+	}
+
+	if (head->data > value)
+		Insertion(head->left, value);
+	else
+		Insertion(head->right, value);
+}
+
+vector<Node*> DFS(Node* root)
+{
+	vector<Node*> visited;
+	queue<Node*> unvisited;
+	unvisited.push(root);
+
+	while (!unvisited.empty())
+	{
+		Node *current = unvisited.front();
+		
+		if (current->left)
+			unvisited.push(current->left);
+		if(current->right)
+			unvisited.push(current->right);
+
+		unvisited.pop();
+		visited.push_back(current);
+	}
+
+	return visited;
+}
+
+int main()
+{
+	Node *root = new Node(20);
+	Insertion(root, 15);
+	Insertion(root, 30);
+	Insertion(root, 10);
+	Insertion(root, 18);
+	Insertion(root, 35);
+	Insertion(root, 34);
+	Insertion(root, 38);
+
+	vector<Node*> visited = DFS(root);
+	for_each(visited.begin(), visited.end(), [](Node* n) { cout << n->data << " "; });
+	cout << endl;
+}

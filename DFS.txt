@@ -1,0 +1,165 @@
+Depth First Search
+
+1. Explores the node deapthwise
+2. Uses a stack
+3. Normally made with recursion but can be iterative as well
+4. DFS is faster than BFS
+5. Has visited and unvisited lists, the top of the unvisited list/stack is explored first
+   the unvisited adjacent nodes are then added to the top of the stack
+6. Can be used to determine cycles in graphs, finding path
+7. In a BST, it can be achieved by pre-order, post-order and in-order traversal
+
+
+complexity - time : O(Vertices + Edges),   space: O(Vertices) - same as BFS
+
+
+
+0 ----3
+| \
+|  2
+| /  \
+1     4
+
+
+start from 0
+
+visited list- 0
+queue       - 1, 2, 3
+
+visited list- 0, 1
+queue       - 2, 3
+
+visited list- 0, 1, 2
+queue       - 4, 3
+
+visited list- 0, 1, 2, 4
+queue       - 3
+
+visited list- 0, 1, 2, 4, 3
+queue       - 
+
+
+#include <stack>
+#include <algorithm>
+
+struct Node
+{
+	Node* left;
+	Node* right;
+	int data;
+
+	Node(int d)
+		:left(nullptr), right(nullptr), data(d)
+	{
+	}
+};
+
+/*
+	    20
+	   /  \
+	  15  30
+	 /  \   \
+	10   18  35
+		/  \
+	       34  38
+
+
+dfs
+vector count = 1, 2, 3, 2
+vector - 20, 15, 30, 10, 18, 35, 34, 38
+*/
+
+void Insertion(Node*& head, int value)
+{
+	if (!head)
+	{
+		head = new Node(value);
+		return;
+	}
+
+	if (head->data > value)
+		Insertion(head->left, value);
+	else
+		Insertion(head->right, value);
+}
+
+//traditional BFS
+//If doing for a graph, you'll need to add a boolean to the graph node to check visited or not
+//since it's a tree and number of connection are static, no need to
+vector<Node*> BFS(Node*& head)
+{
+	stack<Node*> unvisitedSt;
+	vector<Node*> visitedVc;
+
+	unvisitedSt.push(head);
+
+	while (!unvisitedSt.empty())
+	{
+		Node* temp = unvisitedSt.top();
+		unvisitedSt.pop();
+
+		if(temp->right)
+			unvisitedSt.push(temp->right);
+		if (temp->left)
+			unvisitedSt.push(temp->left);
+
+		visitedVc.push_back(temp);
+	}
+	return visitedVc;
+}
+enum type{
+	PREORDER, INORDER, POSTORDER
+};
+
+void OrderedBFS(Node*& head, type t, vector<Node*>& vec)
+{
+
+	if (!head)
+		return;
+
+	if (t == PREORDER)
+		vec.push_back(head);
+
+	OrderedBFS(head->left, t, vec);
+
+	if (t == INORDER)
+		vec.push_back(head);
+
+	OrderedBFS(head->right, t, vec);
+
+	if (t == POSTORDER)
+		vec.push_back(head);
+
+}
+
+int main()
+{
+	Node *root = new Node(20);
+	Insertion(root, 15);
+	Insertion(root, 30);
+	Insertion(root, 10);
+	Insertion(root, 18);
+	Insertion(root, 35);
+	Insertion(root, 34);
+	Insertion(root, 38);
+
+	auto func = [](Node* n) { cout << n->data << " "; };
+
+	auto print = [=](vector<Node*> v)
+	{
+		for_each(v.begin(), v.end(), func);
+		cout << endl;
+	};
+
+	vector<Node*> visited = BFS(root);
+	vector<Node*> preorder, inorder, postorder;
+
+	OrderedBFS(root, type::PREORDER, preorder);
+	OrderedBFS(root, type::INORDER, inorder);
+	OrderedBFS(root, type::POSTORDER, postorder);
+
+	print(visited);
+	print(preorder);
+	print(inorder);
+	print(postorder);
+}

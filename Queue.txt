@@ -1,0 +1,201 @@
+Queues
+
+1. FIFO or LILO
+2. There's front and rear pointers, when queue is empty both are set to -1
+3. front is where the elements are removed from
+4. When rear pointer is -1, the queue is full. When front is null the queue is empty
+5. Enqueue (insert), dequeue(delete), isEmpty, isFull, peek are queue functions
+6. needs to reset queue to remove empty space in front
+
+[][][][][][][]
+ 0 1 2 3 4 5 6
+
+enqueue
+[2][3][4][][][][]
+
+dequeue
+[][3][4][][][][]
+
+When using an array complexity for enqueue and dequeue is O(1)
+
+
+Member functions
+
+(constructor)-Construct queue (public member function )
+empty -Test whether container is empty (public member function )
+size -Return size (public member function )
+front -Access next element (public member function )
+back -Access last element (public member function )
+push -Insert element (public member function )
+emplace -Construct and insert element (public member function )
+pop -Remove next element (public member function )
+swap-Swap contents (public member function )
+
+
+Non-member function overloads
+
+relational operators - Relational operators for queue (function )
+swap (queue)-Exchange contents of queues (public member function )
+
+
+Non-member class specializations
+
+uses_allocator<queue>- Uses allocator for queue (class template )
+
+Circular queues
+
+1. last element is connected to the first element
+2. solves the empty space problem in a normal queue - after dequeue, there's empty space in front
+
+
+Dequeue
+
+Member functions
+
+(constructor)    Construct deque container (public member function )
+(destructor)    Deque destructor (public member function )
+operator=    Assign content (public member function )
+
+Iterators
+
+begin -Return iterator to beginning (public member function )
+end -Return iterator to end (public member function )
+rbegin -Return reverse iterator to reverse beginning (public member function )
+rend -Return reverse iterator to reverse end (public member function )
+cbegin -Return const_iterator to beginning (public member function )
+cend -Return const_iterator to end (public member function )
+crbegin -Return const_reverse_iterator to reverse beginning (public member function )
+crend -Return const_reverse_iterator to reverse end (public member function )
+
+Capacity:
+
+size -Return size (public member function )
+max_size -Return maximum size (public member function )
+resize -Change size (public member function )
+empty -Test whether container is empty (public member function )
+shrink_to_fit -Shrink to fit (public member function )
+
+Element access:
+
+operator[] -Access element (public member function )
+at -Access element (public member function )
+front -Access first element (public member function )
+back -Access last element (public member function )
+
+Modifiers:
+
+assign -Assign container content (public member function )
+push_back -Add element at the end (public member function )
+push_front -Insert element at beginning (public member function )
+pop_back -Delete last element (public member function )
+pop_front -Delete first element (public member function )
+insert -Insert elements (public member function )
+erase -Erase elements (public member function )
+swap -Swap content (public member function )
+clear -Clear content (public member function )
+emplace -Construct and insert element (public member function )
+emplace_front -Construct and insert element at beginning (public member function )
+emplace_back -Construct and insert element at the end (public member function )
+
+Allocator:
+get_allocator -Get allocator (public member function )
+
+Non-member functions overloads
+relational operators- Relational operators for deque (function )
+swap -Exchanges the contents of two deque containers (function template )
+
+
+//========================================== Queue ======================================
+
+#define MAX 10
+class Queue
+{
+private:
+	int front;
+	int rear;
+	int queue[MAX];
+
+public:
+	Queue() :front(-1), rear(-1) {};
+
+	bool isFull()
+	{
+		return rear == MAX - 1;
+	}
+
+	bool isEmpty()
+	{
+		return front >= MAX - 1;
+	}
+
+	void Enqueue(int x)
+	{
+		if (!isFull())
+		{
+			rear++;
+			queue[rear] = x;		
+		}
+	}
+
+	void Dequeue()
+	{
+		if (!isEmpty())
+		{
+			front++;
+		}
+		else
+		{
+			if (front >= rear)
+			{
+				front = -1;
+				rear = -1;
+			}
+			else
+				front++;
+		}
+	}
+
+	int Peek()
+	{
+		if (!isEmpty())
+			return queue[rear];
+		else
+			return -1;
+	}
+
+	void Display()
+	{
+		if (!isEmpty())
+		{
+			for (int i = front; i <= rear; i++)
+				cout << queue[i] << " ";
+			cout << endl;
+		}
+	}
+};
+
+int main()
+{
+	Queue q1;
+	q1.Enqueue(2);
+	q1.Enqueue(6);
+	q1.Enqueue(7);
+	q1.Enqueue(3);
+	q1.Enqueue(8);
+	q1.Enqueue(9);
+	q1.Enqueue(1);
+	q1.Enqueue(0);
+	q1.Display();
+
+	q1.Dequeue();
+	q1.Display();
+
+	q1.Enqueue(7);
+	q1.Enqueue(8);
+	q1.Enqueue(9);
+	q1.Display();
+}
+
+
+
+

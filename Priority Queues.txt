@@ -1,0 +1,16 @@
+Priority Queues
+
+1. Each item in a queue is associated with a priority
+2. Item with the biggest priority gets dequeued first
+3. If more than one item has the same priority then the order in the queue is considered.
+4. Can be implemented using arrays, linked lists and heaps - heaps are the best ways
+5. Has getHighestPriority() and deleteHighestPriority()
+5. Can be used for Dijkstra's shortest path algo and implementing spanning trees
+
+for heaps - insert/delete O(log n), getHighestpriority O(1)
+
+Operations					peek  		insert  	delete			
+Linked List					O(1)		O(n)		O(1)			
+Binary Heap					O(1)		O(log n)	O(log n)
+
+REVIST AFTER TREES AND HEAPS

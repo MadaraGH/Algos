@@ -1,0 +1,190 @@
+Trees
+
+Trees are non linear data structures
+
+terminology-
+
+Root - top most node
+leaf - bottom most nodes in the tree hierarchy
+subtree - descendednts of a node when the root is not null
+parent node - any node, except the root node that has a child node
+ancestor node - any node in the path from that node to the root
+key - value of the node
+level - a root node is at level 1, nodes immediately below it are on level 2 etc..
+degree - the nuber of children that node has
+
+
+1. Binary trees
+
+A binary tree can only have 2 child nodes
+A binary tree in which each node has 0 or 2 children is called a full binary tree
+A perfect binary tree is one that 2 child nodes except for it's lowest level. All leaf nodes should be at the same level
+
+2. Balanced binary trees
+
+A height balancing tree , in which when the left subtree and the right subtree height difference of any node is nomore than 1
+
+
+
+3. Binary search tree (BST)
+ 
+Can maintain a sorted list of numbers
+can search a nuber in O(log(n))
+ - all nodes on left subtree are less than the root
+ - all nodes on right subtree more than root node
+ - all subtrees follow the above two rules
+
+Operation	Best Case Complexity	Average Case Complexity		Worst Case Complexity			
+Search			O(log n)		O(log n)			O(n)			
+Insertion		O(log n)		O(log n)			O(n)			
+Deletion		O(log n)		O(log n)			O(n)
+
+
+//========================================== Binary trees ======================================
+
+
+struct Node
+{
+	Node* left;
+	Node* right;
+	int data;
+
+	Node(int d)
+		:left(nullptr), right(nullptr), data(d)
+	{
+	}
+};
+
+/*
+			   20
+			   /  \
+			  15  30
+			 /  \   \
+           		10   18  35
+				/  \
+				34  38
+*/
+
+void printTree(Node* root)
+{
+	if (!root)
+	{
+		return;
+	}
+
+	cout << root->data << " "; //20 15 10 18 30 35 34 38
+	printTree(root->left);
+	//cout << root->data << " ";//10 15 18 20 30 34 35 38
+	printTree(root->right);
+	//cout << root->data << " "; //10 18 15 34 38 35 30 20
+	
+}
+
+// Check height balance
+int checkHeightBalance(Node *root, int *height) 
+{
+	if (!root)
+		return 1;
+
+	int leftH = 0, rightH = 0;
+	leftH += checkHeightBalance(root->left, height);
+	rightH += checkHeightBalance(root->right, height);
+
+	if (abs(leftH - rightH))
+		cout << "Unbalanced tree at :" << root->data << "!" << endl;
+
+	*height = leftH < rightH ? rightH : leftH;
+	return *height + 1;
+}
+
+int main()
+{
+	Node *root = new Node(20);
+	root->left = new Node(15);
+	root->right = new Node(30);
+	root->left->left = new Node(10);
+	root->left->right = new Node(18);
+	root->right->right = new Node(35);
+	root->right->right->left = new Node(34);
+	root->right->right->right = new Node(38);
+
+	printTree(root);
+	cout << endl;
+
+	int height = 0;
+	checkHeightBalance(root, &height);
+	cout << "Height of tree : " << height << endl;
+}
+
+
+//========================================== Binary Search Trees ======================================
+
+
+struct Node
+{
+	Node* left;
+	Node* right;
+	int data;
+
+	Node(int d)
+		:left(nullptr), right(nullptr), data(d)
+	{
+	}
+};
+
+
+void Insertion(Node*& head, int value)
+{
+	if (!head)
+	{
+		head = new Node(value);
+		return;
+	}
+
+	if (head->data > value)
+		Insertion(head->left, value);
+	else
+		Insertion(head->right, value);
+}
+
+void Deletion(Node*& head, int value)
+{
+	if (!head)
+	{
+		head = new Node(value);
+		return;
+	}
+
+	if (head->data > value)
+		Insertion(head->left, value);
+	else
+		Insertion(head->right, value);
+}
+
+void printTree(Node* root)
+{
+	if (!root)
+	{
+		return;
+	}
+
+	cout << root->data << " "; //20 15 10 18 30 35 34 38
+	printTree(root->left);
+	printTree(root->right);
+
+}
+
+int main()
+{
+	Node *root = new Node(20);
+	Insertion(root, 15);
+	Insertion(root, 30);
+	Insertion(root, 10);
+	Insertion(root, 18);
+	Insertion(root, 35);
+	Insertion(root, 34);
+	Insertion(root, 38);
+
+	printTree(root);
+
+}

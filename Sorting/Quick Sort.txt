@@ -1,0 +1,85 @@
+Quick sort
+
+1. Based on divide and conquer
+2. There is a pivot, high and low value
+3. The pivot is normally the right most element, and low is the left most and high again is the right most
+4. Left most should be lower value elements
+
+Time Complexity
+Worst -  O(n2)					 			
+Best/ average - O(n*log n)
+			
+
+
+8  7  6  1  0  9  2		start from low (i=low) and traverse through the array untill a lower value 
+l        i        p,h  		element than p is found arr[i] < arr[p], swap element in arr[i] with arr[l], increment low
+
+1  7  6  8  0  9  2		arr[p] < arr[l] -> swap arr[i], arr[l] -> l++ 		
+   l        i     p,h
+
+1  0  6  8  7  9  2		when index reaches h swap arr[p], arr[l]
+      l           p,h,i
+
+1  0  2  8  7  9  6		treat left and right of array as sub arrays and repeat steps. 
+      p				The pointer position is regarded as sorted. 
+
+1  0
+l   p,h
+
+0  1  
+         8  7  9  6
+         l        p,h
+ 
+         6  7  9  8		6 is sorted now
+            
+            7  9  8             arr[i] < arr[p] --> swap arr[i], arr[l], it doesn't matter that i == low
+            l     p,h           increment low. I
+
+            7  9  8        	index reaches h, swap arr[p], arr[l]            
+               l  p,h
+
+            7  8  9
+               p
+
+0  1  2  6  7  8  9
+
+
+//========================================== Quick Sort ======================================
+
+int Partition(vector<int>& arr, int low, int high)
+{
+	int index = low;
+	int pivot = high;
+
+	for (int i = low; i < high; i++)
+	{
+		if (arr[i] < arr[pivot])
+		{
+			swap(arr[i], arr[index]);
+			index++;
+		}
+	}
+	swap(arr[pivot], arr[index]);
+	return index;
+}
+
+
+void QuickSort(vector<int>& arr, int low, int high)
+{
+	if (low < high)
+	{
+		int iPivot = Partition(arr, low, high);
+		QuickSort(arr, low, iPivot - 1);
+		QuickSort(arr, iPivot + 1, high);
+	}
+}
+
+
+int main()
+{
+	vector<int> vec1 = { 8, 7, 6, 1, 0, 9, 2 };
+	QuickSort(vec1, 0, vec1.size() - 1);
+
+	vector<int> vec2 = { 101, 10, 2, 43, 12, 54, 34, 64, 89, 76 };
+	QuickSort(vec2, 0, vec2.size() - 1);
+}

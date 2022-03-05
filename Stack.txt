@@ -1,0 +1,130 @@
+Stacks
+
+
+1. LIFO or FILO - last in first out/ first in last out
+2. insertion is called push and removal is called pop
+3. peek - bring s the value of the top most element without poping it
+4. a pointer to the top is kept
+5. A stack can be initialized to -1 so we can see if it's empty
+6. has isEmpty() isFull() operations
+7. A stack is good to reverse stuff, bodmas stuff, browser stack etc..
+
+pop and push has O(1) complexity
+
+
+Member functions
+
+(constructor)    Construct stack (public member function )
+
+empty	Test whether container is empty (public member function )
+
+size    Return size (public member function )
+
+top    	Access next element (public member function )
+
+push    Insert element (public member function )
+
+emplace Construct and insert element (public member function )
+
+pop    	Remove top element (public member function )
+
+swap   	Swap contents (public member function )
+
+
+Non-member function overloads
+
+relational operators    Relational operators for stack (function )
+
+swap (stack)    	Exchange contents of stacks (public member function ) //swaps two stacks
+
+
+Non-member class specializations
+
+uses_allocator<stack>    Uses allocator for stack (class template )
+
+
+//========================================== Stack ======================================
+
+#define MAX 10
+
+struct stack_s
+{
+	int top;
+	int items[MAX];
+};
+
+class Stack
+{
+private:
+	stack_s st;
+
+public:
+	Stack() 
+	{
+		st.top = -1;
+	}
+
+	bool isFull()
+	{
+		return st.top < MAX - 1;
+	}
+
+	bool isEmpty()
+	{
+		return st.top < 0;
+	}
+
+	void push(int i)
+	{
+		if (isFull())
+		{
+			st.top++;
+			st.items[st.top] = i;
+		}
+		else
+			cout << "Stack Full!" << endl;
+	}
+
+	void pop()
+	{
+		if(!isEmpty())
+			st.top--;
+	}
+
+	int peek()
+	{
+		return st.items[st.top];
+	}
+
+	void print()
+	{
+		if (!isEmpty())
+		{
+			cout << "Stack items :";
+			for (int i = 0; i <= st.top; i++)
+				cout << st.items[i] << " ";
+
+			cout << endl;
+		}
+	}
+};
+
+int main()
+{
+	Stack st;
+	st.push(2);
+	st.push(4);
+	st.push(6);
+	st.push(8);
+	st.push(1);
+	st.push(3);
+	st.push(5);
+
+	st.print();
+	st.pop();
+	st.print();
+}
+
+
+
+

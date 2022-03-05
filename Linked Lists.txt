@@ -1,0 +1,262 @@
+
+1) Unlike arrays, data is not stored contiguously
+2) Consists of nodes -> each node has two parts (singly linked list) - one that stores data(value), the other a pointer to the next node
+
+Singly linked lists
+1st node is called head
+last node is called tail
+adding and deleting from linked lists are easy
+no need to allocate memory - dont have to know the size beforehand
+
+cons
+size - mormally we need to traverse the list to find out how many nodes there are
+cannot randomly access nodes
+extra memory is need to store the pointer to the next node
+
+double linked lists
+has data and two pointers, one to the previous node and other to the next one
+also has a head and tail
+can reverse a linked list
+can traverse forwards and backwards
+
+
+circular linked lists
+last node points to the fist node
+
+
+linked lists - time complexity
+
+Insertions and deletions
+without traversal - o(1)
+with traversal - O(n)
+
+ 
+search
+o(n)
+
+c++ has doubly linked lists
+
+(constructor)    Construct list (public member function )
+
+(destructor)     List destructor (public member function )
+
+operator=    	 Assign content (public member function )
+
+
+Iterators:
+
+begin    	Return iterator to beginning (public member function )
+
+end    		Return iterator to end (public member function )
+
+rbegin    	Return reverse iterator to reverse beginning (public member function )
+
+rend    	Return reverse iterator to reverse end (public member function )
+
+cbegin    	Return const_iterator to beginning (public member function )
+
+cend    	Return const_iterator to end (public member function )
+
+crbegin    	Return const_reverse_iterator to reverse beginning (public member function )
+
+crend    	Return const_reverse_iterator to reverse end (public member function )
+
+
+Capacity:
+
+empty    	Test whether container is empty (public member function )
+
+size    	Return size (public member function )
+
+max_size    	Return maximum size (public member function )
+
+
+Element access:
+
+front    	Access first element (public member function )
+
+back    	Access last element (public member function )
+
+
+Modifiers:
+
+assign    	Assign new content to container (public member function )
+
+emplace_front   Construct and insert element at beginning (public member function )
+
+push_front    	Insert element at beginning (public member function )
+
+pop_front    	Delete first element (public member function )
+
+emplace_back    Construct and insert element at the end (public member function )
+
+push_back    	Add element at the end (public member function )
+
+pop_back    	Delete last element (public member function )
+
+emplace    	Construct and insert element (public member function )
+
+insert    	Insert elements (public member function )
+
+erase    	Erase elements (public member function )
+
+swap    	Swap content (public member function )
+
+resize    	Change size (public member function )
+
+clear    	Clear content (public member function )
+
+
+Operations:
+
+splice    	Transfer elements from list to list (public member function )
+
+remove    	Remove elements with specific value (public member function )
+
+remove_if    	Remove elements fulfilling condition (public member function template )
+
+unique    	Remove duplicate values (public member function )
+
+merge    	Merge sorted lists (public member function )
+
+sort    	Sort elements in container (public member function )
+
+reverse    	Reverse the order of elements (public member function )
+
+
+Observers:
+
+get_allocator   Get allocator (public member function )
+
+
+Non-member function overloads
+
+relational operators (list)    Relational operators for list (function )
+
+swap (list)		 Exchanges the contents of two lists (function template )
+
+
+
+//========================================== Linked lists======================================
+
+//single linked lists
+struct Node 
+{
+	int value;
+	Node *next;
+
+	Node( int val ) : value( val ), next(nullptr) {};
+	~Node()
+	{
+		std::cout << "Node with val " << value << " got deleted" << std::endl;
+		if (next)
+			delete next;
+	}
+};
+
+class LinkedList
+{
+private:
+	Node *head;
+	Node *tail;
+
+public:
+	LinkedList() :head(nullptr), tail(nullptr) {}
+
+	void insert(int v)
+	{
+		Node *node = new Node(v);
+		if (!head)
+			head = tail = node;
+		else
+		{
+			tail->next = node;
+			tail = node;
+		}
+	}
+
+	void concatanate(Node* a)
+	{
+		Node *tmp = a;
+		while (tmp)
+		{
+			tail->next = tmp;
+			tail = tmp;
+			tmp = tmp->next;
+		}
+	}
+
+	void deleteByValue(int d)
+	{
+		Node *tmp = head;
+		Node *prev = nullptr;
+		while (tmp)
+		{
+			if (tmp->value == d)
+			{
+				prev->next = tmp->next;
+				delete tmp;
+				break;
+			}
+			prev = tmp;
+			tmp = tmp->next;
+		}
+	}
+
+	Node* getHead()
+	{
+		return head;
+	}
+};
+
+int main() 
+{
+	vector<int> vec = { 2,5,7,1,4,7 };
+
+	//insert node
+	Node *head = new Node(vec[0]);
+	Node *ptr = head;
+
+	for (int i = 1; i < vec.size(); i++)
+	{
+		Node *temp = new Node(vec[i]);
+		ptr->next = temp;
+		ptr = temp;
+	}
+
+	//remove from tail
+	delete ptr;
+	
+
+	//insert next to 7
+	ptr = head;
+	while (ptr)
+	{
+		if (ptr->value == 7)
+		{
+			Node *node = new Node(8);
+			node->next = ptr->next;
+			ptr->next = node;
+			break;
+		}
+		ptr = ptr->next;
+	}
+
+	LinkedList l1;
+	l1.insert(3);
+	l1.insert(7);
+	l1.insert(9);
+	l1.insert(2);
+	l1.insert(5);
+
+	LinkedList l2;
+	l2.insert(6);
+	l2.insert(5);
+	l2.insert(4);
+	l2.insert(2);
+	l2.insert(3);
+
+	l1.concatanate(l2.getHead());
+	l1.deleteByValue(9);
+
+}

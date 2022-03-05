@@ -1,0 +1,116 @@
+Dijstra's algorithm
+
+1. Used to find the shortest path between 2 vertices in a weighted graph
+2. Different from minimum spanning tree as it doesn't include all the nodes in a grapn
+3. The algorithm works on the basis that if a path A-C basses through B, then the shortest path possible from B-C is also B-C
+   ie - the subpaths are also the shortest possible paths
+4. Only works with a graph that has positive weights
+
+Start with the source vertex and mark all unvisited vertices with infinity
+Once a vertex is visited update it's value with the edge weight
+Visit all adjacent vertices and select the vertice with the smallest value
+Then go that vertex and repeat the process
+      
+
+	A      D		start from A and B,C,D,E,F = infinity
+	|4\  3/ \2		visit adjacent nodes B, C
+   	|  \ /	 \		B = 4, C = 4
+       4|   C-----F	  	B-C = 2, A-B-C = 6, therefore B is out
+	|  / \ 6 /              current path is A-C
+	|2/  1\ /3   		From C visit D, E, F update the values
+	B/     E		D-7 (4,3) E-5, F-10
+
+We pick E first since it has the least value of 5
+C-E-f = 8, is less than 10 so F is again updated to 8. Then we try D(7)
+c-D-F = 9, is greater than 8 so it's discarded
+So the correct path is A-C-E-F = 8
+
+
+
+//========================================== Dijkstra's Algorithm ======================================
+
+
+/*
+Return the index of the unvisited node with the least value
+*/
+int MinDistance(int dist[], bool visited[], int size)
+{
+	int min = INT_MAX;
+	int idx = 0;
+
+	for (int i = 0; i < size; i++)
+	{
+		if (!visited[i] && dist[i] < min)
+		{
+			min = dist[i];
+			idx = i;
+		}
+	}
+	return idx;
+}
+
+template <int size> 
+int Dijkstra(int (&graph) [size][size], int src)
+{
+	//stores the distance from src to each vertex
+	int distance[size];
+	bool visited[size];
+
+	for (int i = 0; i < size; i++)
+	{
+		distance[i] = INT_MAX;
+		visited[i] = false;
+	}
+	distance[src] = 0;//set the source value to 0
+
+	for (int i = 0; i < size; i++)
+	{
+		int idx = MinDistance(distance, visited, size);
+		visited[idx] = true;//set the current node we're traversing from to true
+
+		for (int j = 0; j < size; j++)
+		{
+			int val = graph[idx][j];
+			if (val && (distance[idx] + val) < distance[j])
+				distance[j] = distance[idx] + val;
+		}
+	}
+}
+
+int main()
+{
+	int graph1[6][6] = {
+	{ 0, 1, 2, 0, 0, 0 },
+	{ 1, 0, 0, 5, 1, 0 },
+	{ 2, 0, 0, 2, 3, 0 },
+	{ 0, 5, 2, 0, 2, 2 },
+	{ 0, 1, 3, 2, 0, 1 },
+	{ 0, 0, 0, 2, 1, 0 } };
+
+	Dijkstra(graph1, 0);
+
+	/*
+	for 2nd graph
+	A      D
+	|4\  3/ \2
+	|  \ /	 \
+       4|   C-----F
+	|  / \ 6 /
+	|2/  1\ /3
+	B/     E
+
+	*/
+
+	int graph2[6][6] = {
+	{0, 4, 4, 0, 0, 0},
+	{4, 0, 2, 0, 0, 0},
+	{4, 2, 0, 3, 1, 6},
+	{0, 0, 3, 0, 0, 2},
+	{0, 0, 1, 0, 0, 3},
+	{0, 0, 6, 2, 3, 0} };
+
+	Dijkstra(graph2, 0);
+
+}
+
+

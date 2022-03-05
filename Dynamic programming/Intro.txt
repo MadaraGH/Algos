@@ -1,0 +1,74 @@
+Dynamic programming 
+
+can be applied if;
+   - The problem can be broken down into "overlapping subproblems" 
+     smaller versions of the original problem that are re-used multiple times.
+   - The problem has an "optimal substructure" 
+     an optimal solution can be formed from optimal solutions to the overlapping subproblems of the original problem.
+
+Eg- take fibonacci (start with 0 and 1 then keeps adding prev 2 numbers)- 0, 1, 1, 2, 3, 5, 8, 13...
+    You need to find the nth fibonacci F(n)
+    
+This can be broken into subproblems F(n-1) and F(n-2), the answer is
+ F(n−1) + F(n−2) = F(n), this has optimal substructure since the solution is derived from overlapping subproblems
+
+Greedy algo has optimal substructure but not overlapping subproblems
+Divide and conquer algos break into subproblems, but they aren't overlapping
+
+eg - fibonacci drawn
+
+          	     8                                     Here the subproblems are overlapping
+          3        		  5			   the solution for 3 gets called 2 times	
+    1   	2     	    2		3		   solution for 2 gets called 3 times etc..
+   0  1       1.. 1..  	  1..  1..    1..   2..		   in divide and conquer and greedy the problems do not overlap
+
+Through dynamic programming, the normally exponential time complexity algorithm of fibonacci can be reduced to linear time
+
+
+There's 2 ways to implement dynamic programming
+
+1. Top down - Tabulation
+2. Bottom up - Memoization
+
+
+1. Tabulation
+
+Implemented with iteration and starts at the base case
+
+// Pseudocode example for bottom-up
+
+F = array of length (n + 1)
+F[0] = 0
+F[1] = 1
+for i from 2 to n:
+    F[i] = F[i - 1] + F[i - 2]
+
+
+2. Memoization
+
+Implemented with recursion and made efficient with memoization
+memoizing a result means to store the result of a function call, usually in a hashmap or an array, 
+so that when the same function call is made again, we can simply return the memoized result instead of recalculating the result.
+
+// Pseudocode example for top-down
+
+memo = hashmap
+Function F(integer i):
+    if i is 0 or 1: 
+        return i
+    if i doesn't exist in memo:
+        memo[i] = F(i - 1) + F(i - 2)
+    return memo[i]
+
+
+When to use DP.
+There're some common characteristics that can be used to identify DP problems
+
+1. It will normally ask for the optimum (min or max) of something - common for greedy algos as well
+eg  What is the minimum cost of doing...
+    What is the maximum profit from...
+    How many ways are there to do...
+    What is the longest possible...
+    Is it possible to reach a certain point...
+
+2. Future decisions depend on earlier decisions - this is the character that diffrenciated DP from greedy

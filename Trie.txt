@@ -1,0 +1,152 @@
+Trie
+
+1. A form of tree that's used to store words/strings/ a dictionary
+2. Can have any number of sub trees, is an n-tree
+3. Is good for a dictionary
+   Good to find prefixes
+4. Can be implemented using maps and a boolean that specifies if the char completes a word or not
+   Can use a char[] array pointer as well
+
+				time complexity 		space complexity
+insert 				O(word length)			O(word length)
+search 				O(word length)			O(1)
+
+
+A trie consists of the char, a boolean to figure out if the char signifies the end of a word.
+There's also a map of <char,tries>, so that every char in the word can have branch out and create a new word
+ 				
+eg - char value (is_word)
+						root - 0 (false)
+					/			      \
+				c (false)   	     			r(false) 
+				    |					/	\
+ 				a (false)	    	    	    a(false)   o(false)
+				/	\				|	|
+			   r(false)	t (true)	    	    t(true)    t(true)
+				|					|
+     			   p(false)		  	    	    e(true)
+				|
+			      ...
+
+
+
+
+
+
+struct Tries
+{
+	char ch;
+	map<char, Tries*> charMap;
+	bool isWord;
+
+	Tries(char c) :ch(c), isWord(false) {};
+};
+
+void Insert(Tries*& head, const string& str)
+{
+	Tries* temp = head;
+	int size = str.length();
+
+	for (int i = 0; i < size; i++)
+	{
+		if (temp->charMap.count(str[i]) == 0)//if the char doesn't allready exist in the map, create a new one to contain it
+		{
+			Tries *newT = new Tries(str[i]);
+			temp->charMap[str[i]] = newT;
+			temp = newT;
+		}
+		else 
+			temp = temp->charMap[str[i]]; //else just move the pointer down to the existing char
+	}
+	temp->isWord = true; // at the end of the word set isword
+}
+
+//TODO - figure this out with recursion
+//this is wrong atm
+Tries* Delete(Tries*& head, const string& str, int count)
+{
+	if (!head)
+		return nullptr;
+
+	if(head->charMap.count(str[count]) == 0 )
+		return nullptr;
+
+	Tries* temp = head->charMap[str[count]];
+	temp = Delete(temp, str, ++count);
+
+	
+	if (temp)
+	{
+		bool isWord = temp->charMap[str[count]]->isWord;
+		bool isNotCurrentWord = count < str.length() - 1;
+
+		if ((isWord && !isNotCurrentWord) || !isWord)
+			temp->charMap.erase(str[count]);
+		else
+			return nullptr;
+	}
+
+	return head;
+}
+
+Tries* HasWord(Tries*& head, const string& str)
+{
+	int size = str.length();
+	Tries *temp = head;
+	for (int i = 0; i < size; i++)
+	{
+		if (temp->charMap.count(str[i]) > 0)
+			temp = temp->charMap[str[i]];
+		else
+			return nullptr;
+	}
+	return temp;
+}
+
+//has to contain the whole word, and it has to be inserted as a word
+//cannot be a prefix
+bool Search(Tries*& head, const string& str)
+{
+	int size = str.length();
+	Tries *temp = HasWord(head, str);
+
+	if (temp && temp->isWord)
+		return true;
+
+	return false;
+}
+
+//Cannot be a whole word
+bool SearchPrefix(Tries*& head, const string& str)
+{
+	int size = str.length();
+	Tries *temp = HasWord(head, str);
+
+	if (temp && !temp->isWord)
+		return true;
+
+	return false;
+}
+
+int main()
+{
+	// stand, car, prat, rat, pose
+	Tries* root = new Tries('0');
+	Insert(root, "cat");
+	Insert(root, "rat");
+	Insert(root, "rate");
+	Insert(root, "carpenter");
+	Insert(root, "rot");
+
+	bool b1 = Search(root, "roast");
+	bool b2 = Search(root, "can");
+
+	bool b3 = SearchPrefix(root, "car");
+	bool b4 = SearchPrefix(root, "red");
+	bool b5 = SearchPrefix(root, "cat");
+
+	Delete(root, "rates", 0);
+
+}
+
+       

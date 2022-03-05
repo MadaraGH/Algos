@@ -1,0 +1,265 @@
+Graphs
+
+1. Non linear data structure which has vertices and edges
+2. There's directed and undireted graphs. Graphs that have directions in their edges are called directed graphs.
+
+
+Vertex: Each node of the graph is called a vertex.
+    
+Edge: The link or path between two vertices is called an edge. It connects two or more vertices. 
+    
+Adjacent node: In a graph, if two nodes are connected by an edge then they are called adjacent nodes or neighbors. 
+    
+Degree of the node: The number of edges that are connected to a particular node is called the degree of the node.
+    
+Path: The sequence of nodes that we need to follow when we have to travel from one vertex to another in a graph is called the path. 
+    
+Closed path: If the initial node is the same as a terminal node, then that path is termed as the closed path.
+    
+Simple path: A closed path in which all the other nodes are distinct is called a simple path.
+    
+Cycle: A path in which there are no repeated edges or vertices and the first and last vertices are the same is called a cycle. 
+    
+Connected Graph: A connected graph is the one in which there is a path between each of the vertices. 
+                This means that there is not a single vertex which is isolated or without a connecting edge. 
+    
+Complete Graph: A graph in which each node is connected to another is called the Complete graph. 
+               If N is the total number of nodes in a graph then the complete graph contains N(N-1)/2 number of edges.
+    
+Weighted graph: A positive value assigned to each edge indicating its length (distance between the vertices connected by an edge) is called weight. 
+                The graph containing weighted edges is called a weighted graph. The weight of an edge e is denoted by w(e) and it indicates the cost of traversing an edge.
+    
+Diagraph: A digraph is a graph in which every edge is associated with a specific direction and the traversal can be done in specified direction only.
+
+
+
+3. Representation - the way that a graph structure is stored in memory is called 'representation'
+
+-Sequential representation  
+ Use an adjacency matrix of n * n (n - number of vertices)
+
+A ---- B                        A  B  C  D  E         
+| \     \                    A  0  1  1  1  0
+|  \     \                   B  1  0  0  0  1  
+|   \     E                  C  1  0  0  1  0   
+|    \   /                   D  1  0  1  0  1        
+|     \ /                    E  0  1  0  1  0
+C----- D
+
+
+A -------->B                    A  B  C  D  E         
+|^\      ^/                  A  0  1  1  0  0
+|  \     /                   B  0  0  0  0  0  
+|   E   /                    C  0  0  0  1  0   
+v   ^\ /                     D  0  1  0  0  1        
+C---->D                      E  1  0  0  0  0
+
+ weighted graph
+ In a weighted graph, the 1's are replaced with the weight aassociated with the edge 
+
+- Linked representation
+  Use an adjacency list. Maintains each node of the graph and a link to nodes that are adjacent for that node.
+  After all adjacent nodes are traversed the next pointer is set to null
+  For a weighted graph, we add an extra field in the adjacent node to store the weight
+  This is the easier and more memory saving 
+  (not necessary faster, if we want to see if an edge exists between a,e- it's easier with matrix)
+
+   
+A ---- B                     A->B->c->D->null       
+| \     \                    B->A->E->null
+|  \     \                   C->A->D->null
+|   \     E                  D->A->c->E->null   
+|    \   /                   E->B->D->null       
+|     \ /                    
+C----- D
+
+  2
+A ---> B                     A -->B,2 -->c,4 -->null       
+|      ^\ 3                  B -->E,3 -->null
+|      | V                   C -->D,2 -->null
+|4    4|  E                  D -->B,4 -->null   
+|      | /3                  E -->D,3 -->null       
+v      |V                    
+C----> D
+  2
+
+
+4. Used in social networking sites, transport systems, google maps
+
+5. Spanning tree
+   A spanning tree is a sub-graph of an undirected connected graph, which includes all the vertices of the graph with a minimum possible number of edges.
+   A minimum spanning tree is a spanning tree in which the sum of the weight of the edges is as minimum as possible.
+ 
+
+#include <set>
+#include <algorithm>
+
+struct Vertex
+{
+	int id;
+	set<Vertex*> adjacencyList;
+
+	Vertex(int x) : id(x) {}
+
+	~Vertex()
+	{
+		cout << "Oh no! we're getting deleted!" << endl;
+	}
+
+};
+
+class Graph
+{
+public:
+	vector<Vertex*> vertices;
+	vector<pair<Vertex*, Vertex*>> edges;
+	vector<vector<int>> matrix;
+
+	Graph(vector<Vertex*> &v, vector<pair<Vertex*, Vertex*>>& e)
+		:vertices(v), edges(e)
+	{
+		vector<vector<int>> temp(v.size(), vector<int>(v.size(), 0));
+		matrix = temp;
+	}
+
+	void CreateAdjacencyList();
+	set<Vertex*> GetAdjacencyList(Vertex*& v)
+	{
+		return v->adjacencyList;
+	}
+
+	void createAdjacencyMatrix();
+	vector<vector<int>> GetAdjacencyMatrice()
+	{
+		return matrix;
+	}
+
+	~Graph()
+	{
+		for (auto v : vertices)
+			delete v;
+	}
+};
+
+void Graph::CreateAdjacencyList()
+{
+	for (auto p : edges)
+	{
+		p.first->adjacencyList.insert(p.second);
+		p.second->adjacencyList.insert(p.first);
+	}
+}
+
+void Graph::createAdjacencyMatrix()
+{
+	for (auto p : edges)
+	{
+		matrix[p.first->id - 1][p.second->id - 1] = 1;
+		matrix[p.second->id - 1][p.first->id - 1] = 1;
+	}
+}
+
+
+////////////method 2 - using edges
+
+
+struct Edge
+{
+	int startV, endV, weight;
+};
+
+class Graph2
+{
+public:
+	
+	vector<vector<int>> matrix;
+	vector<vector<int>> adjacencyList;
+
+	std::vector<Edge> edgeList;
+	void CreateGraph();
+
+	Graph2(std::vector<Edge> el, int N)
+		:edgeList(el)
+	{
+		vector<vector<int>> temp(N, vector<int>(N, 0));
+		adjacencyList.resize(N);
+		matrix = temp;
+		CreateGraph();
+	}
+};
+
+
+void Graph2::CreateGraph()
+{
+	for (auto e : edgeList)
+	{
+		matrix[e.startV - 1][e.endV - 1] = e.weight;
+		matrix[e.endV - 1][e.startV - 1] = e.weight;
+
+		adjacencyList[e.startV - 1].push_back(e.endV);
+		adjacencyList[e.endV - 1].push_back(e.startV);
+	}
+}
+
+
+int main()
+{
+	vector<Vertex*> vertices;
+	for (int i = 0; i < 5; i++)
+		vertices.push_back(new Vertex(i + 1));
+
+	vector<pair<Vertex*, Vertex*>> edges = {
+		{vertices[0],vertices[1]},
+		{vertices[0],vertices[2]},
+		{vertices[0],vertices[3]},
+		{vertices[2],vertices[3]},
+		{vertices[1], vertices[4]},
+		{vertices[3], vertices[4] } };
+
+	Graph g1(vertices, edges);
+	g1.CreateAdjacencyList();
+	g1.createAdjacencyMatrix();
+
+	set<Vertex*> v = g1.GetAdjacencyList(g1.vertices.at(1));
+	for_each(v.begin(), v.end(), [](Vertex* vrt) { cout << vrt->id << " "; });
+	cout << endl;
+
+	vector<vector<int>> v2 = g1.GetAdjacencyMatrice();
+	auto func = [](vector<int> v)
+	{
+		for_each(v.begin(), v.end(), [](int i) { cout << i << " "; });
+		cout << endl;
+	};
+	for_each(v2.begin(), v2.end(), func);
+	cout << endl;
+
+
+	////////////method 2 - using edges
+	std::vector<Edge> edgeList = { {1, 2, 5}, {1, 3, 2}, {1, 4, 1}, 
+								 {3, 4, 2}, {2, 5, 3}, {4, 5, 4} };
+
+	Graph2 g2(edgeList, 5);
+
+	vector<vector<int>> v3 = g2.adjacencyList;
+	for_each(v3.begin(), v3.end(), func);
+	cout << endl;
+
+	vector<vector<int>> v4 = g2.matrix;
+	for_each(v4.begin(), v4.end(), func);
+	cout << endl;
+}
+
+====================================================================================================
+
+
+Leetcode notes 
+
+disjoint set - another name for union set
+
+2 important functions of disjoint sets
+	The find function finds the root node of a given vertex.
+	The union function unions two vertices and makes their root nodes the same
+
+union of rank - set the root node depending on the height of the trees
+This is useful when joining 2 trees of different root nodes, 
+we check which tree has the highest depth and take its root node

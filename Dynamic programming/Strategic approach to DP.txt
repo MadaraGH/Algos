@@ -1,0 +1,84 @@
+We take climbing stair example for this;
+	You are climbing a staircase. It takes n steps to reach the top.
+	Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top? -- think about this, you got this wrong last time
+
+
+In DP you need to define 'state'
+state -  set of variables that can sufficiently describe a scenario
+in the above example the state variable is the current step you're on
+
+Framework
+You need to combine the following 3 to get a DP solution
+
+1.A function or data structure that will compute/contain the answer to the problem for every given state
+
+This means finding how many different ways are there to get to each step. 
+eg- how many different ways are there to get to step 5 ot step 7
+
+2. A recurrence relation to transition between states.
+
+A recurrence relation will relate different states with each other.
+
+For the above problem to get to the 30th stair you either need to take 2 steps from 28th or 1 from 29.
+Eg- take all possible ways to get to 28 and add 2, takke all possible ways to get to 29 and add 1
+So the problem ties 29 and 38th to 30. so dp(30) = dp(29) + dp(28) ==>  dp(n) = dp(n-1) + dp(n-2)
+When you look at the above solution to get to nth stair, you can see that this is basically the fibonacci sequence
+
+3. Base cases, so that our recurrence relation doesn't go on infinitely
+
+To come up with base cases, you have to fugure out which steps can be done without DP
+here those are tep 1 and 2 (1 way and only 2 ways to climb up)
+   
+
+
+2nd example : House robber
+https://leetcode.com/problems/house-robber/ -- interestingly it was done differently by myself first(which was faster)
+
+You are a professional robber planning to rob houses along a street. 
+Each house has a certain amount of money stashed, the only constraint stopping you from robbing each of them is that adjacent houses 
+have security systems connected and it will automatically contact the police if two adjacent houses were broken into on the same night.
+
+Given an integer array nums representing the amount of money of each house, 
+return the maximum amount of money you can rob tonight without alerting the police.
+
+state
+The state here is the current house you're at. 
+If the probem was something like you're only allowed to rob k houses, then state would be k
+
+recurrence relation
+Here the relation is either you can rob or not rob the current house.
+IF you chose to rob, then the money from previous house robbery cannot me used.
+So you have to decide which is higher
+so dp(n) = max(dp(n) + dp(n-2), dp(n-1))
+
+base cases
+if theres only 1 house we return it
+if there're 2 houses, then we return the max of that house
+
+Multi dimentional DP
+
+The number of state variables depends on the number of dimentions
+
+The following are common things to look out for in DP problems that require a state variable:
+
+- An index along some input. This is usually used if an input is given as an array or string. (for the above problems that was the case)
+- A second index along some input. Sometimes, you need two index state variables, say i and j. 
+  ie- dp(1, 3) would solve the problem for the input nums = [1, 2, 3], if the original input was [0, 1, 2, 3, 4, 5, 6].
+- Explicit numerical constraints given in the problem. 
+  ie- "you are only allowed to complete k transactions", or "you are allowed to break up to k obstacles", etc.
+- Variables that describe statuses in a given state.
+  ie- "true if currently holding a key, false if not", "currently holding k packages" etc.
+- Some sort of data like a tuple or bitmask used to indicate things being "visited" or "used". 
+  ie - "bitmask is a mask where the ith bit indicates if the ith city has been visited"
+
+
+3rd example - Maximum Score from Performing Multiplication Operations
+https://leetcode.com/problems/maximum-score-from-performing-multiplication-operations/
+
+You are given two integer arrays nums and multipliers of size n and m respectively, where n >= m. The arrays are 1-indexed.
+
+You begin with a score of 0. You want to perform exactly m operations. On the ith operation (1-indexed), you will:
+
+Choose one integer x from either the start or the end of the array nums.
+Add multipliers[i] * x to your score.
+Remove x from the array nums.

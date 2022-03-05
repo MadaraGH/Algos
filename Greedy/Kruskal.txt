@@ -1,0 +1,161 @@
+Kruskal's Algorithms
+
+1. Is a minimum spanning tree algorithm, that takes a graph and finds the tree that includes every vertex
+   Has the minimum sum of weights possible 
+2. Starts from the lowest weight and keep adding edges untill goal is reached
+
+Compexity is O(E log E)
+
+Sort all edges from low to high
+Take edge that has lowest weight and add to the spanning tree
+Keep adding edges until all vertices are reached
+If the edge added causes a cycle then it's rejected
+
+	A      D			A      D
+	|4\  3/ \3		        |    3/ \3
+	|  \ /	 \			|    /	 \
+       4|   C-----F   	   ==>         4|   C	  F
+	|  / \ 4 /			| 2/ \   
+	|2/  2\ /3			| /  2\ 
+	B/     E			B/     E
+
+Union finding is used to find if the edge added will cause a cycle
+If the parent of both vertices are the samethen there will be a cycle
+
+consider the above diagram - 
+
+Sorted edge list - (B,C) (C,E) (C,D) (D,F) (E,F) (A,B) (A,C) (C,F)
+
+A B C D E F  		The primary parent array at the begining
+A B C D E F		Then we start to consider the edge with the least weights
+ 			
+A B C D E F  		Take the edge B,C since both of them have different parents  Take edge C,E --> C's parent is 
+A B B D E F		we can add is to MST, mark C's parent as B
+
+A B C D E F  		Take edge C,E --> C's parent is B and E's is E
+A B B D B F		add it to MST, mark E's parent the same as C's
+
+A B C D E F  		C,D -> add to MSt mark D's parent as C's
+A B B B B F
+
+A B C D E F  		D,F -> add to MSt mark F's parent as D's
+A B B B B B			
+
+A B C D E F  		E,F -> both have the same parent (B), this will cause a cycle
+A B B B B B		we're going to ignore this edge
+
+A B C D E F  		A,B -> Different parents. Add to MST, mark B's parent as A
+A A B B B B	
+
+A B C D E F  		A,C -> C's parent is B, B's parent is A so both have the same parent
+A A B B B B		We ignore this edge. (we have to recursively search for C's parent)
+			C,F is ignored in a similar manner
+
+
+
+//========================================== Kruskal's Algorithm ======================================
+
+#include <algorithm>
+
+//Find original parent from recursion
+int FindParent(vector<int>& parents, int i)
+{
+	if (i == parents[i])
+		return i;
+	else
+	{
+		int parent = FindParent(parents, parents[i]);
+		parents[i] = parent;
+		return parent;
+	}
+	
+}
+
+template <int size>
+int Kruskal(int(&graph)[size][size], int src)
+{
+	//create graph and edges
+	vector<int> parents;
+	vector<pair<int, pair<int, int>>> edges;
+
+	for (int i = 0; i < size; i++)
+	{
+		parents.push_back(i);
+
+		for (int j = i; j < size; j++)
+		{
+			if (graph[i][j] > 0)
+				edges.push_back({ graph[i][j], {i, j } }); 
+			
+		}
+	}
+
+	//sort vector to 
+	sort(edges.begin(), edges.end());
+
+	vector<pair<int, pair<int, int>>> mst;
+	int count = 0;
+
+	for (int i = 0; i < edges.size(); i++)
+	{
+		auto edge = edges[i];
+		int x = FindParent(parents, edge.second.first);
+		int y = FindParent(parents, edge.second.second);
+
+		if (parents[x] != parents[y])
+		{
+			mst.push_back(edge);
+			count += edge.first;
+
+			//set union
+			parents[y] = parents[x];
+		}
+	}
+
+	return count;
+}
+
+int main()
+{
+	/*
+	A__2____C___3___E
+	|      _|_/   /	|
+       1|  _1_/ |2  /2	|1
+	| /	| /	|
+	B_______D_______F
+	   5	    2
+	*/
+
+	int graph1[6][6] = {
+	{ 0, 1, 2, 0, 0, 0 },
+	{ 1, 0, 0, 5, 1, 0 },
+	{ 2, 0, 0, 2, 3, 0 },
+	{ 0, 5, 2, 0, 2, 2 },
+	{ 0, 1, 3, 2, 0, 1 },
+	{ 0, 0, 0, 2, 1, 0 } };
+
+	int count1 = Kruskal(graph1, 0);
+
+	/*
+	for 2nd graph
+	A      D
+	|4\  3/ \2
+	|  \ /	 \
+       4|   C-----F
+	|  / \ 6 /
+	|2/  1\ /3
+	B/     E
+
+	*/
+
+	int graph2[6][6] = {
+	{0, 4, 4, 0, 0, 0},
+	{4, 0, 2, 0, 0, 0},
+	{4, 2, 0, 3, 1, 6},
+	{0, 0, 3, 0, 0, 2},
+	{0, 0, 1, 0, 0, 3},
+	{0, 0, 6, 2, 3, 0} };
+
+	int count2 = Kruskal(graph2, 0);
+
+}

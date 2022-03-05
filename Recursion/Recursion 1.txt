@@ -1,0 +1,80 @@
+
+Recursion is an approach to solving problems using a function that calls itself as a subroutine.
+
+A recursive function should have the following properties
+    A simple base case (or cases) — a terminating scenario that does not use recursion to produce an answer.
+    A set of rules, also known as recurrence relation that reduces all other cases towards the base case.
+
+
+For a problem, if there exists a recursive solution, we can follow the guidelines below to implement it. 
+For instance, we define the problem as the function F(X){F(X)}F(X) to implement, where X{X}X is the input of the function which also defines the scope of the problem.
+
+Then, in the function F(X){F(X)}F(X), we will:
+
+    Break the problem down into smaller scopes, such as x0∈X,x1∈X,...,xn∈X{x_0} \in X, {x_1} \in X, ..., {x_n} \in Xx0​∈X,x1​∈X,...,xn​∈X;
+    Call function F(x0),F(x1),...,F(xn){F(x_0)}, F(x_1), ..., F(x_n)F(x0​),F(x1​),...,F(xn​) recursively to solve the subproblems of X{X}X;
+    Finally, process the results from the recursive function calls to solve the problem corresponding to X{X}X.
+
+
+Recurrence relation
+
+Need to figure out the following before writing a recursive function
+
+
+ - recurrence relation: 
+   the relationship between the result of a problem and the result of its subproblems.
+ - base case: 
+   the case where one can compute the answer directly without any further recursion calls. 
+   Sometimes, the base cases are also called bottom cases, since they are often the cases where the problem has been reduced to the minimal scale, 
+   i.e. the bottom, if we consider that dividing the problem into subproblems is in a top-down manner.
+
+Once we figure out the above two elements, to implement a recursive function we simply call the 
+function itself according to the recurrence relation until we reach the base case.
+
+(Pascal's triangles were described here - The rows start from the top (1st row is top most), 
+                                         colums start from each element in the row, left to right)
+
+Linekd list reversal - Once your each what you want (the new head), keep returing it, dont return anything else except it!
+
+Memoization
+Memoization is an optimization technique used primarily to speed up computer programs by storing the results of expensive function calls 
+and returning the cached result when the same inputs occur again
+
+
+
+Time complexity
+
+
+ Given a recursion algorithm, its time complexity O(T) is typically the product of the number of recursion invocations (denoted as R) 
+and the time complexity of calculation (denoted as O(s) that incurs along with each recursion call:
+
+    O(T) = R ∗ O(s)
+
+When it's difficult to say the O(n), it's better to create a execution tree to find it. When it's a binary tree then O(N) = O(2^n)
+
+
+
+Space complexity
+
+
+In recursive functions, unless it is a tail recusion, there's additional overhead in the stack 
+It there's one integer and the function is getting called N times then space complexity is O(N)
+If it's a tail recursion then it's O(1 )
+
+"For recursive algorithms, the function calls chain up successively until they reach a base case (a.k.a. bottom case). 
+This implies that the space that is used for each function call is accumulated."
+
+"For a recursive algorithm, if there is no other memory consumption, 
+then this recursion incurred space will be the space upper-bound of the algorithm."
+
+
+"The benefit of having tail recursion is that it could avoid the accumulation of stack overheads during the recursive calls, 
+since the system could reuse a fixed amount space in the stack for each recursive call."
+
+
+As a reminder, here is the general workflow to solve a recursion problem:
+
+    Define the recursion function;
+    Write down the recurrence relation and base case;
+    Use memoization to eliminate the duplicate calculation problem, if it exists.
+    Whenever possible, implement the function as tail recursion, to optimize the space complexity.
