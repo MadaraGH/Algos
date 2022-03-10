@@ -15,3 +15,12 @@ where n≥2{n \geq 2}n≥2, i.e. there are usually more than one subproblem.
 2. Conquer. Solve each subproblem recursively. 
 
 3. Combine. Combine the results of each subproblem.
+
+
+Master Theorem
+Master Theorem, also known as Master Method, provides asymptotic analysis (i.e. the time complexity) 
+for many of the recursion algorithms that follow the pattern of divide-and-conquer. 
+
+heven't completely looked this up
+
+
