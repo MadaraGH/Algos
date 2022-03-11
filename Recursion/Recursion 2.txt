@@ -21,6 +21,11 @@ Master Theorem
 Master Theorem, also known as Master Method, provides asymptotic analysis (i.e. the time complexity) 
 for many of the recursion algorithms that follow the pattern of divide-and-conquer. 
 
-heven't completely looked this up
+heven't completely looked this up --- need to study it better
+
+Backtracking
+Backtracking is a general algorithm for finding all (or some) solutions to some computational problems 
+(notably Constraint satisfaction problems or CSPs), which incrementally builds candidates to the solution 
+and abandons a candidate ("backtracks") as soon as it determines that the candidate cannot lead to a valid solution.
 
 
