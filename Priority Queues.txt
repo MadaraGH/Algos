@@ -10,7 +10,7 @@ Priority Queues
 for heaps - insert/delete O(log n), getHighestpriority O(1)
 
 Operations					peek  		insert  	delete			
-Linked List					O(1)		O(n)		O(1)			
-Binary Heap					O(1)		O(log n)	O(log n)
+Linked List					O(1)		  O(n)		  O(1)			
+Binary Heap					O(1)		  O(log n)	O(log n)
 
-REVIST AFTER TREES AND HEAPS
+
